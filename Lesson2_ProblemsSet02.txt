@@ -1,0 +1,127 @@
+Which 10 Composers wrote the most songs in the dataset?
+
+SELECT Composer, COUNT(*) FROM Track GROUP BY Composer ORDER BY COUNT(*) DESC LIMIT 10;
+
+----------------------------------------------------------------------------------------------
+Which Tracks in the dataset are between 2500000 and 2600000 milliseconds long?
+
+SELECT Name, Milliseconds FROM Track WHERE Milliseconds > 2500000 and Milliseconds < 2600000 ORDER BY Milliseconds
+
+-----------------------------------------------------------------------------------------------------
+List albums written by either Iron Maiden or Amy Winehouse
+
+SELECT Artist.name, Album.Title FROM Album JOIN Artist on Album.ArtistId=Artist.ArtistId WHERE Artist.name='Iron Maiden' OR Artist.name='Amy Winehouse';
+
+
+---------------------------------------------------------------------------------------------------------
+
+##  Alright, now that you're warmed up let's get down to business!
+
+##  In this problem set we'll pretend the Chinook database is the data for your own personal music shop!
+##  We'll be marketing your shop and hosting Music Festival using answers we get from 
+##  the data stored in your database.
+##  Let's get started :)
+
+##  First, you'd like to run a promotion targeting the 3 countries with the 
+##  highest number of invoices.  
+
+##  Write a query that returns the 3 countries with the highest number of invoices, along with the number ##  of invoices for these countries.
+
+SELECT BillingCountry, COUNT(*) as num FROM Invoice GROUP BY BillingCountry ORDER BY num DESC LIMIT 3;
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+##  A customer with the FirstName Helena has been declard your best customer.
+##  She definitely deserves an email thanking her for their patronage :)  
+
+##  Build a query that returns Helena's email, first name, last name, 
+##  and the sum of all invoices she has received.
+
+
+
+
+
+
+
+SELECT Customer.Email as Email,Customer.firstname as Firstname,Customer.Lastname as Lastname, sum(Invoice.Total) as Total FROM Customer,Invoice WHERE Customer.CustomerId=Invoice.CustomerId AND Customer.firstname='Helena';
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+##  Rock Music Lives on!  After the success of your recent email campaign,  
+##  you're interested in targeting your long standing Rock Music audience!
+##  You'll need to collect a list of emails containing each of your Rock Music listeners.
+
+##  Use your query to return the email, first name, last name, and Genre of all Rock Music listeners!
+##  Return you list ordered alphabetically by email address starting with A.
+##  Can you find a way to deal with duplicate email addresses so no one receives multiple emails?
+
+SELECT DISTINCT Customer.Email,Customer.firstname,Customer.Lastname,Genre.Name FROM Customer, Invoice, InvoiceLine, Track, Genre WHERE
+   Customer.customerId = Invoice.CustomerId
+   AND Invoice.InvoiceId = InvoiceLine.InvoiceId
+   AND InvoiceLine.TrackId=Track.TrackId
+   AND Track.GenreId=Genre.GenreId
+   AND Genre.name = 'Rock' ORDER BY Customer.Email;
+   
+------------------------------------------------------------------------------------------------------------------------------------------
+
+##  Let's throw a promotional Music Festival in the city with the best customers!
+##  Which city have you made the most money from?
+
+##  Write a query that returns the 1 city that has the highest sum of invoice totals.
+##  Return both the city name and the sum of all invoice totals.
+
+SELECT BillingCity,sum(Total) as Total FROM Invoice GROUP BY BillingCity ORDER BY Total DESC LIMIT 1;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+##  It would be really helpful to know what type of music everyone likes before 
+##  throwing this festival.
+##  Lucky for us we've got the data to find out!  
+##  We should be able to tell what music people like by figuring out what music they're buying.
+
+##  Write a query that returns the BillingCity,total number of invoices 
+##  associated with that particular genre, and the genre Name.
+
+##  Return the top 3 most popular music genres for the city 
+##  with the highest invoice total (you found this in the previous quiz!)
+
+SELECT Invoice.BillingCity,COUNT(Genre.Name), Genre.Name FROM Invoice,InvoiceLine,Track,Genre WHERE
+   Invoice.InvoiceId=InvoiceLine.InvoiceId
+   AND InvoiceLine.TrackId=Track.TrackId
+   AND Track.GenreId =Genre.GenreId AND Invoice.BillingCity = 'Prague'
+   GROUP BY Genre.Name
+   ORDER BY COUNT(Genre.Name) DESC LIMIT 3;
+   
+-------------------------------------------------------------------------------------------------------------------------------------
+
+##  Now that we know that our customers love rock music, we can decide which musicians to 
+##  invite to play at the concert. 
+
+##  Let's invite the artists who have written the most rock music in our dataset.
+##  Write a query that returns the Artist name and total track count of the top 10 rock bands. 
+
+select Artist.Name,count(Genre.Name) from Genre,Track,Album,Artist where Genre.GenreId=Track.GenreId and Track.AlbumId=Album.AlbumId and Album.ArtistId=Artist.ArtistId and Genre.Name='Rock' group by Artist.Name ORDER BY count(Genre.Name) DESC LIMIT 10;
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+##  The show was a huge hit! Congratulations on all your hard work :)  
+##  After the popularity of your first show you've decided to jump on the
+##  railway for an Alternative & Punk tour through France!  
+
+##  What does the alternative punk scene look like throughout French 
+##  cities in your dataset?
+
+##  Return the BillingCities in France, followed by the total number of 
+##  tracks purchased for Alternative & Punk music.
+##  Order your output so that the city with the most invoices is on top.
+
+select BillingCity, count(Invoice.Total) from Invoice,InvoiceLine,Track,Genre where
+   Invoice.InvoiceId=InvoiceLine.InvoiceId
+   and InvoiceLine.TrackId=Track.TrackId
+   and Track.GenreId=Genre.GenreId
+   and Invoice.BillingCountry='France' and Genre.Name='Alternative & Punk' group by BillingCity order by count(Invoice.Total) DESC;
+
+   

@@ -1,0 +1,156 @@
+# Try out this query! You'll see the results below.
+# You'll be seeing many more pages like this in the rest of this lesson.
+# For now, just test it out.
+
+QUERY = '''
+SELECT name, birthdate 
+FROM animals 
+WHERE species = 'gorilla';
+'''
+
+-------------------------------------------------------------------------------------------------
+# The query below finds the names and birthdates of all the gorillas.
+# 
+# Modify it to make it find the names of all the animals that are not
+# gorillas and not named 'Max'.
+#
+
+QUERY = '''
+SELECT name
+FROM animals 
+WHERE species != 'gorilla' and name != 'Max';
+'''
+
+----------------------------------------------------------------------------------------------------
+
+# Find all the llamas born between January 1, 1995 and December 31, 1998.
+# Fill in the 'where' clause in this query.
+
+QUERY = '''
+SELECT name 
+FROM animals
+WHERE species = 'llama' and 
+birthdate >= '1995-01-01' and birthdate <= '1998-12-31';
+'''
+
+---------------------------------------------------------------------------------------------------------
+#
+# Uncomment one of these QUERY variables at a time and use "Test Run" to run it.
+# You'll see the results below.  Then try your own queries as well!
+#
+
+QUERY = "select max(name) from animals;"
+
+QUERY = "select * from animals limit 10;"
+
+QUERY = "select * from animals where species = 'orangutan' order by birthdate;"
+
+QUERY = "select name from animals where species = 'orangutan' order by birthdate desc;"
+
+QUERY = "select name, birthdate from animals order by name limit 10 offset 20;"
+
+QUERY = "select species, min(birthdate) from animals group by species;"
+
+QUERY = '''
+select name, count(*) as num from animals
+group by name
+order by num desc
+limit 5;
+'''
+--------------------------------------------------------------------------------------------------------------
+#
+# Write a query that returns all the species in the zoo, and how many animals of
+# each species there are, sorted with the most populous species at the top.
+# 
+# The result should have two columns:  species and number.
+#
+# The animals table has columns (name, species, birthdate) for each individual.
+# 
+QUERY = "select species , count(*) as number from animals group by species order by number desc";
+
+--------------------------------------------------------------------------------------------------------------------
+
+#
+# Insert a newborn baby opossum into the animals table and verify that it's been added.
+# To do this, fill in the rest of SELECT_QUERY and INSERT_QUERY.
+# 
+# SELECT_QUERY should find the names and birthdates of all opossums.
+# 
+# INSERT_QUERY should add a new opossum to the table, whose birthdate is today.
+# (Or you can choose any other date you like.)
+#
+# The animals table has columns (name, species, birthdate) for each individual.
+#
+
+#SELECT_QUERY = "SELECT name, species, birthdate FROM animals WHERE species ='opossums';"
+
+INSERT_QUERY = "INSERT INTO animals values ('Widdle','opossums','2012-11-12');"
+------------------------------------------------------------------------------------------------------------------------
+
+#
+# Find the names of the individual animals that eat fish.
+#
+# The animals table has columns (name, species, birthdate) for each individual.
+# The diet table has columns (species, food) for each food that a species eats.
+#
+
+QUERY = '''
+SELECT animals.name FROM animals,diet WHERE animals.species=diet.species and diet.food='fish';
+'''
+--------------------------------------------------------------------------------------------------------------------------
+#
+# Find the one food that is eaten by only one animal.
+#
+# The animals table has columns (name, species, birthdate) for each individual.
+# The diet table has columns (species, food) for each food that a species eats.
+#
+
+QUERY = '''
+SELECT count(*) as num, diet.food FROM animals,diet WHERE animals.species=diet.species 
+group by diet.food having num =1;
+'''
+
+--------------------------------------------------------------------------------------------------------------------------
+#
+# List all the taxonomic orders, using their common names, sorted by the number of
+# animals of that order that the zoo has.
+#
+# The animals table has (name, species, birthdate) for each individual.
+# The taxonomy table has (name, species, genus, family, t_order) for each species.
+# The ordernames table has (t_order, name) for each order.
+#
+# Be careful:  Each of these tables has a column "name", but they don't have the
+# same meaning!  animals.name is an animal's individual name.  taxonomy.name is
+# a species' common name (like 'brown bear').  And ordernames.name is the common
+# name of an order (like 'Carnivores').
+    
+QUERY = '''
+SELECT ordernames.name, COUNT(*) as num FROM animals,taxonomy,ordernames
+WHERE taxonomy.name=animals.species AND taxonomy.t_order=ordernames.t_order
+GROUP BY ordernames.name ORDER BY num DESC;
+
+'''
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+# List all the taxonomic orders, using their common names, sorted by the number of
+# animals of that order that the zoo has.
+#
+# The animals table has (name, species, birthdate) for each individual.
+# The taxonomy table has (name, species, genus, family, t_order) for each species.
+# The ordernames table has (t_order, name) for each order.
+#
+# Be careful:  Each of these tables has a column "name", but they don't have the
+# same meaning!  animals.name is an animal's individual name.  taxonomy.name is
+# a species' common name (like 'brown bear').  And ordernames.name is the common
+# name of an order (like 'Carnivores').
+    
+QUERY = '''
+select ordernames.name,count(taxonomy.t_order) as num
+from taxonomy,ordernames,animals
+where animals.species = taxonomy.name and taxonomy.t_order=ordernames.t_order
+group by ordernames.t_order
+order by num desc;
+'''
+
