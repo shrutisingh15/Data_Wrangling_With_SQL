@@ -33,6 +33,7 @@ The results showed the presence of records that still had wrong format of the ty
 #### For node_tags:
 
 <code>
+
 if not PROBLEMCHARS.search(tag.attrib['k']):
 
      if LOWER_COLON.search(tag.attrib['k']):
@@ -42,6 +43,7 @@ if not PROBLEMCHARS.search(tag.attrib['k']):
            key=sub[-1]
            
            typev=sub[-2]
+           
  </code>                               
                                
 #### For way_tags:
