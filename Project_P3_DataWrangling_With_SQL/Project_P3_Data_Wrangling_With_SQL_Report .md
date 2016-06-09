@@ -9,7 +9,7 @@ It is the economic and educational hub of Central New York, a region with over a
 
 ### Problems Encountered:
 
-I kick started my analysis by exploring for the common errors in street names and postal codes by running the audit_street_name() and audit_postalcode() function codes against the dataset.The following errors were encountered by me :
+I kick started my analysis by exploring for the common errors in street names and postal codes by running the audit_street_name() and audit_postalcode() function codes in audit.py file against the dataset.The following errors were encountered by me :
 
 #### 1.Abbreviations and typo error in street names:
 
@@ -34,9 +34,13 @@ The results showed the presence of records that still had wrong format of the ty
 
 <code>
 if not PROBLEMCHARS.search(tag.attrib['k']):
+
      if LOWER_COLON.search(tag.attrib['k']):
+     
            sub=tag.attrib['k'].split(':',1)
+           
            key=sub[-1]
+           
            typev=sub[-2]
  </code>                               
                                
@@ -44,9 +48,13 @@ if not PROBLEMCHARS.search(tag.attrib['k']):
 
 <code>
 if not PROBLEMCHARS.search(tag.attrib['k']):
+
      if LOWER_COLON.search(tag.attrib['k']):
+     
            sub=tag.attrib['k'].split(':',1)
+           
            keyval=sub[-1]
+           
            typeval=sub[-2]
 </code>
 
